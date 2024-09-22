@@ -1,4 +1,4 @@
-package toolkit
+package servertools
 
 import (
 	"errors"
@@ -7,12 +7,17 @@ import (
 	"path/filepath"
 )
 
-type Toolkit struct {
+type Tools struct {
 	TmplsDir    string
 	BaseTmplDir string
 }
 
-func (t *Toolkit) RenderTmpl(w http.ResponseWriter, r *http.Request, name string, code int, data any) error {
+// RenderTmpl handles the rendering of templates including the main page template and the base layout
+func (t *Tools) RenderTmpl(w http.ResponseWriter, r *http.Request, name string, code int, data any) error {
+	if &t.TmplsDir == nil {
+		return errors.New("the templates directory (TmplsDir) variably needs to be set")
+	}
+
 	tmpl := template.New(name)
 
 	if &t.BaseTmplDir != nil {
@@ -21,10 +26,6 @@ func (t *Toolkit) RenderTmpl(w http.ResponseWriter, r *http.Request, name string
 			return err
 		}
 		tmpl = tmplNew
-	}
-
-	if &t.TmplsDir == nil {
-		return errors.New("the templates directory (TmplsDir) variably needs to be set")
 	}
 
 	tmpl, err := tmpl.ParseFiles(filepath.Join(t.TmplsDir, name))

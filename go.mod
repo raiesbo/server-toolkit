@@ -1,3 +1,3 @@
-module github.com/raiesbo/server-toolkit
+module github.com/raiesbo/servertools
 
 go 1.23
